@@ -1,11 +1,46 @@
 #!/usr/bin/node
-const http = require("http");
+const express = require("express");
+const app = express();
+//const http = require("http");
 const fs = require("fs");
-const url = require("url");
 
 const port = process.env.PORT || 8080;
-const indexURL = new URL("http://localhost:3000/");
-const aboutURL = new URL("/about.html", "http://localhost:3000/");
+
+app.get("/", (req, res) => {
+    fs.readFile("./index.html", "utf-8", (err, data) => {
+        if (err) throw err;
+        res.statusCode = 200;
+        res.setHeader("content-type", "text/html");
+        res.end(data);
+    });
+});
+
+app.get("/about", (req, res) => {
+    fs.readFile("./about.html", "utf-8", (err, data) => {
+        if (err) throw err;
+        res.statusCode = 200;
+        res.setHeader("content-type", "text/html");
+        res.end(data);
+    });
+});
+
+app.get("/contact-me", (req, res) => {
+    fs.readFile("./contact-me.html", "utf-8", (err, data) => {
+        if (err) throw err;
+        res.statusCode = 200;
+        res.setHeader("content-type", "text/html");
+        res.end(data);
+    });
+});
+
+app.use(express.static(__dirname));
+
+app.listen(port, () => {
+    console.log(`Listening on port ${port}.`);
+});
+
+/*
+VERSION BEFORE USING EXPRESS
 
 const httpServer = http.createServer((req, res) => {
     switch (req.url) {
@@ -33,6 +68,14 @@ const httpServer = http.createServer((req, res) => {
                 res.end(data);
             });
             break;
+        case "/style.css":
+            fs.readFile("./style.css", "utf-8", (err, data) => {
+                if (err) throw err;
+                res.statusCode = 200;
+                res.setHeader("content-type", "text/css");
+                res.end(data);
+            });
+            break;
         default:
             fs.readFile("./404.html", "utf-8", (err, data) => {
                 if (err) throw err;
@@ -47,3 +90,4 @@ const httpServer = http.createServer((req, res) => {
 httpServer.listen(port, () => {
     console.log(`Server running at port ${port}`);
 });
+*/
